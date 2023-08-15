@@ -1,1 +1,1 @@
-70
+ ramesh.setName(name);

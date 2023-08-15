@@ -42,6 +42,8 @@ int main()
 
     //dynamic allocation
     Game *ritesh= new Game;
+    (ritesh)->sethealth(60);
+    (ritesh)->setlevel('V');
     cout << "Health : " << (*ritesh).getHealth() << endl;
     cout << "Level : " << (*ritesh).level;
 
