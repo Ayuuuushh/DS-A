@@ -14,6 +14,16 @@ public:
         this->prev = NULL;
         this->next = NULL;
     }
+    ~Node()
+    {
+        int value = this->data;
+        if (next != NULL)
+        {
+            delete next;
+            next = NULL;
+        }
+        cout << "memory free for node with data " << value << endl;
+    }
 };
 // display in DLL
 void print(Node *head)
@@ -85,7 +95,7 @@ void insertAtPosition(Node *&head, Node *&tail, int position, int d)
     // inserting at first
     if (position == 1)
     {
-        insertAtHead(head,tail, d);
+        insertAtHead(head, tail, d);
         return;
     }
 
@@ -98,7 +108,7 @@ void insertAtPosition(Node *&head, Node *&tail, int position, int d)
     // inserting at last
     if (temp->next == NULL)
     {
-        insertAtTail(tail,head, d);
+        insertAtTail(tail, head, d);
         return;
     }
     Node *nodeToInsert = new Node(d);
@@ -108,6 +118,43 @@ void insertAtPosition(Node *&head, Node *&tail, int position, int d)
     temp->next->prev = nodeToInsert;
     temp->next = nodeToInsert;
     nodeToInsert->prev = temp;
+}
+
+// deletion in DLL
+void deleteNode(int position, Node *&head,Node*&tail)
+{
+
+    if (position == 1)
+    {
+        Node *temp = head;
+        temp->next->prev = NULL;
+        head = temp->next;
+        temp->next = NULL;
+        delete temp;
+    }
+    else
+    {
+        Node *curr = head;
+        Node *prev = NULL;
+        int cnt = 1;
+        while (cnt < position)
+        {
+            prev = curr;
+            curr = curr->next;
+            cnt++;
+        }
+
+        curr->prev = NULL;
+        prev->next = curr->next;
+
+        if (prev->next == NULL)
+        {
+            tail = prev;
+        }
+        curr->next = NULL;
+
+        delete curr;
+    }
 }
 int main()
 {
@@ -127,7 +174,10 @@ int main()
     print(head);
     insertAtPosition(head, tail, 1, 110);
     print(head);
-    insertAtPosition(head, tail, 5 , 102);
+    insertAtPosition(head, tail, 5, 102);
     print(head);
+    deleteNode(5, head,tail);
+    print(head);
+    cout << endl <<tail->data;
     return 0;
 }
