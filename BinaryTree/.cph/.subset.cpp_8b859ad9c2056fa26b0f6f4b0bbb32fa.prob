@@ -1,0 +1,1 @@
+{"name":"Local: subset","url":"c:\\Users\\COMPUTER\\DS&A\\BinaryTree\\subset.cpp","tests":[{"id":1697190944408,"input":"5\n2 1 3 4 5","output":"1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\COMPUTER\\DS&A\\BinaryTree\\subset.cpp","group":"local","local":true}
