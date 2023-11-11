@@ -53,6 +53,14 @@ node* insert(node *root, int d)
            
         
     }
+    int getMin(node* root){
+
+        node* temp = root;
+        while(temp->left!=NULL){
+            temp=temp->left;
+        }
+        return temp->data;
+    }
 
     void levelOrderTraversal(node* root) {
     queue<node*> q;
@@ -84,12 +92,62 @@ node* insert(node *root, int d)
     }
 
 }
+
+node* deletion(node* root,int d){
+
+    if(root == NULL)
+    return NULL;
+
+
+    if(root->data == d){
+
+        //No sub node
+        if(!root->right && !root->left){
+            delete root;
+            return NULL;
+        }
+
+        //one node
+        if(root->left == NULL && root->right != NULL){
+            node* curr = root->right;
+            delete root;
+            return curr;
+        }
+        if(root->left != NULL && root->right == NULL){
+           node* curr = root->left;
+            delete root;
+            return curr;
+        }
+
+        //sub-tree
+        if(root->left != NULL && root->right != NULL){
+
+            int mini = getMin(root->right);
+            root->data = mini;
+            root->right=deletion(root->right,mini);
+            return root;
+        }
+
+    }
+    else if(root->data > d){
+       root->left = deletion(root->left,d);
+       return root;
+    }
+    else{
+       root->right= deletion(root->right,d);
+       return root;
+    }
+}
 int main()
 {
 
     node *root = NULL;
 
     takeInput(root);
+    levelOrderTraversal(root);
+    cout << "deletion" << endl;
+
+    root = deletion(root,1);
     levelOrderTraversal(root);
 
     return 0;
