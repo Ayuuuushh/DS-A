@@ -1,0 +1,116 @@
+/* Looking for the approach
+1. Create Graph Class✅
+2. Create edges✅
+3. Create print function✅
+4. Create topo sort function✅
+5. Create Shortest path function✅
+6.print the result✅
+*/
+
+#include <iostream>
+#include <unordered_map>
+#include <list>
+#include <stack>
+#include <vector>
+#include <limits.h>
+
+using namespace std;
+
+// Create Class Called Graph
+class Graph
+{
+public:
+    unordered_map<int, list<pair<int, int>>> adj;
+
+    // Create edges
+    void edges(int u, int v, int weight)
+    {
+        adj[u].push_back(make_pair(v, weight));
+    }
+
+    // Create print function
+    void print(int n)
+    {
+
+        for (int i = 0; i < n; i++)
+        {
+            cout << i << "->";
+            for (auto j : adj[i])
+            {
+                cout << "[" << j.first << "," << j.second << ']';
+            }
+            cout << endl;
+        }
+    }
+
+    // Topological Sort function
+
+    void toposort(int node, unordered_map<int, bool> &vis, stack<int> &s)
+    {
+        vis[node] = 1;
+
+        for (auto neighbour : adj[node])
+        {
+            if (!vis[neighbour.first])
+                toposort(neighbour.first, vis, s);
+        }
+
+        s.push(node);
+    }
+
+    // Create Shortest path algo
+    void shortestPath(stack<int> &s, vector<int> &dis)
+    {
+
+        while (!s.empty())
+        {
+                int top = s.top();
+                s.pop();
+            if (dis[top] != INT_MAX)
+            {
+                for (auto i : adj[top]){
+                    if(dis[top] + i.second < dis[i.first]){
+                        dis[i.first] = dis[top] + i.second;
+                    }
+                }
+            }
+        }
+    }
+};
+int main()
+{
+    Graph g;
+    g.edges(0, 1, 2);
+    g.edges(0, 4, 1);
+    g.edges(1, 2, 3);
+    g.edges(4, 2, 2);
+    g.edges(4, 5, 4);
+    g.edges(5, 3, 1);
+    g.edges(2, 3, 6);
+    g.print(6);
+
+    unordered_map<int, bool> visited;
+    stack<int> st;
+    
+
+    for (int i = 0; i < 6; i++)
+    {
+        if (!visited[i])
+            g.toposort(i, visited, st);
+    }
+   
+
+    vector<int> dis(6,INT_MAX);
+    dis[0] = 0;
+
+    g.shortestPath(st, dis);
+
+    for(int i=0;i<6;i++){
+        if(dis[i] ==  INT_MAX){
+            cout <<"INF" <<',';
+        }else
+        cout << dis[i] << " ," ;
+    }
+
+    return 0;
+}
