@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+#include <iostream>
+using namespace std;
+
+class Graph {
+private:
+  int vertices;
+  unordered_map<int, list<pair<int, int>>> adj;
+
+public:
+  Graph(int v) {
+    vertices = v;
+  }
+
+  void addEdge(int u, int v, int w) {
+    adj[u].push_back(make_pair(v, w));
+    adj[v].push_back(make_pair(u, w));
+  }
+
+  vector<int> dijkstra(int source) {
+    set<pair<int, int>> st;
+    vector<int> dist(vertices, INT_MAX);
+
+    dist[source] = 0;
+    st.insert(make_pair(0, source));
+
+    while (!st.empty()) {
+      auto top = *(st.begin());
+      int nodeDistance = top.first;
+      int topNode = top.second;
+
+      st.erase(st.begin());
+
+      for (auto neighbour : adj[topNode]) {
+        if (nodeDistance + neighbour.second < dist[neighbour.first]) {
+          auto record = st.find(make_pair(dist[neighbour.first], neighbour.first));
+          
+        
+
+          if (record != st.end()) {
+            st.erase(record);
+          }
+
+          dist[neighbour.first] = nodeDistance + neighbour.second;
+          st.insert(make_pair(dist[neighbour.first], neighbour.first));
+        }
+      }
+    }
+
+    return dist;
+  }
+};
+
+int main() {
+  int vertices, edges;
+  cout << "Enter number of vertices and edges: ";
+  cin >> vertices >> edges;
+
+  Graph g(vertices);
+
+  cout << "Enter edges (u v w) for " << edges << " edges:" << endl;
+  for (int i = 0; i < edges; i++) {
+    int u, v, w;
+    cin >> u >> v >> w;
+    g.addEdge(u, v, w);
+  }
+
+  int source;
+  cout << "Enter the source vertex: ";
+  cin >> source;
+
+  vector<int> distances = g.dijkstra(source);
+
+  cout << "The shortest distances from source vertex " << source << " are:" << endl;
+  for (int i = 0; i < vertices; i++) {
+    cout << "Vertex " << i << ": " << distances[i] << endl;
+  }
+
+  return 0;
+}
